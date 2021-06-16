@@ -10,13 +10,20 @@ import InstructionsPage from './pages/InstructionsPage/InstructionsPage';
 
 import { Route, Switch } from 'react-router-dom';
 
+
+// if path is not exact, then show a 404 not found. very basic; only called by the componnent parameter given to us by Route from react-router-dom
 function NotFound() {
   return <h1> 404 Not Found </h1>
 }
 
 
 function App() {
-  const colors = ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD'];
+
+  const colors = {
+    Easy: ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD'],
+    Moderate: ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD', '#B7D966'],
+    Hard: ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD', '#B7D966', '#555E7B']
+  };
 
   // this sets up the variable selColorIdx and a function called setColorIdx
   const [selColorIdx, setColorIdx] = useState(0);
@@ -26,8 +33,8 @@ function App() {
 
   /* helper functions */
 
-  function genCode() {
-    return new Array(4).fill().map(() => Math.floor(Math.random() * colors.length));
+  function genCode(numColors) {
+    return new Array(4).fill().map(() => Math.floor(Math.random() * numColors));
   }
 
 
@@ -64,13 +71,13 @@ function App() {
 
 
   // function for a brand new game, next is to attach/make into a button
-  function getInitialState() {
+  function getInitialState(numColors = 4, difficulty = 'Easy') {
     return {
       guesses: [getNewGuess()],
-      code: genCode()
+      code: genCode(numColors),
+      difficulty
     }
   }
-
 
 
 
@@ -81,9 +88,18 @@ function App() {
     setGameState(getInitialState())
   }
 
+  // function for selecting the level by computing the number of colours based on
+  // level and initializing a new game wth a new level and a new number of colours
+  // for generating a new secret code (answer code)
+
+  function handleDifficultyChange(level) {
+    const numColors = colors[level].length;
+    setGameState(getInitialState(numColors, level))
+  }
 
 
 
+// this function handles clicking the colour and then clicking the guess peg
   function handlePegClick(pegIdx) {
     // makes a copy of gamestate
     const gameStateCopy = { ...gameState }
@@ -184,7 +200,7 @@ function App() {
       <Route exact path="/" render={() => 
     <GamePage 
       winTries={winTries}
-      colors={colors}
+      colors={colors[gameState.difficulty]}
       selColorIdx={selColorIdx}
       guesses={gameState.guesses}
       setColorIdx={setColorIdx}
@@ -193,8 +209,13 @@ function App() {
       handleScoreClick={handleScoreClick}
     />
       } />
-      <Route exact path="/settings" render={() => 
-      <SettingsPage/>
+      <Route exact path="/settings" render={props => 
+      <SettingsPage
+      {...props}
+      colorsLookup={colors}
+      difficulty={gameState.difficulty}
+      handleDifficultyChange={handleDifficultyChange}
+      />
       }/>
       <Route exact path="/instructions" render={() => 
       <InstructionsPage/>
