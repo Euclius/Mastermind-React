@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import './SettingsPage.css';
 
 // setting page component
 //explicit return because return statement is inside
@@ -11,6 +12,7 @@ const SettingsPage = (props) => {
 
     // function for changing the level/ difficulty
     // props.history is from the react dev tools
+    // after level change, redirects to homepage, where the gamepage is located
     function handleLevelChange(level) {
         props.handleDifficultyChange(level);
         props.history.push('/')
@@ -60,7 +62,7 @@ const levels = colorKeys.map(level => (
                 {levels}
             </div>
             <Link
-                className="btn btn-default"
+                className="Settings-to-home btn btn-default"
                 to="/"
             >
                 Home

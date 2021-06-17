@@ -18,6 +18,17 @@ code {
   justify-content: center;
 }
 
-button:focus, .btn:focus {
-  outline: none
+.header-footer {
+
+  height: 50px;
+  padding: 10px;
+  margin: 15px 0;
+  color: rgb(93, 93, 93);
+  font-size: 22px;
+  text-align: center;
+}
+
+
+button:focus {
+  outline: none;
 }

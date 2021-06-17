@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 // make a component variable
 const GamePage = (props) => {
     return (
-        <div className="App">
+        <div className="Gamepage">
             <div className="flex-h align-flex-end">
                 <GameBoard
                     colors={props.colors}
@@ -16,14 +16,18 @@ const GamePage = (props) => {
                     handlePegClick={props.handlePegClick}
                     handleScoreClick={props.handleScoreClick}
                 />
-                <div className="App-controls">
+                <div className="Gamepage-controls">
                     <ColorPicker
                         colors={props.colors}
                         selColorIdx={props.selColorIdx}
                         setColorIdx={props.setColorIdx}
                     />
-                    <GameTimer />
-                    
+                    <GameTimer 
+                    elapsedTime={props.elapsedTime}
+                    isTiming={props.isTiming}
+                    handleTimerUpdate={props.handleTimerUpdate}
+                    />
+<div>
                     <Link
                     style={{marginBottom: 10}}
                     className="btn btn-default" 
@@ -41,9 +45,10 @@ const GamePage = (props) => {
                     <NewGameButton
                         handleNewGameClick={props.handleNewGameClick}
                     />
+</div>                    
                 </div>
             </div>
-            <footer className="App-header-footer">{props.winTries ? `You Won in ${props.winTries} Guesses!` : 'Good Luck!'}</footer>
+            <footer className="header-footer">{props.winTries ? `You Won in ${props.winTries} Guesses!` : 'Good Luck!'}</footer>
         </div>
     )
 }

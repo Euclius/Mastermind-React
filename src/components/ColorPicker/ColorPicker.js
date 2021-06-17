@@ -16,6 +16,7 @@ const ColorPicker = (props) => (
   </div>
 );
 
+export default ColorPicker;
 //lots going on here
 // so the div with the classname of the object of styles.Colorpicker is being grabbed (css module file)
 // then the outside the div, props.colors is being used, then making map of color and of showing the array of idx
@@ -57,6 +58,5 @@ const ColorPicker = (props) => (
 //}}
 
 
-export default ColorPicker;
 
 // style={{backgroundColor: props.color}
