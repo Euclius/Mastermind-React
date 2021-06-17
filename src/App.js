@@ -1,5 +1,5 @@
 // Add an import statement for the useState hook using the "named import" syntax
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import './App.css';
 
@@ -9,6 +9,8 @@ import SettingsPage from './pages/SettingsPage/SettingsPage';
 import InstructionsPage from './pages/InstructionsPage/InstructionsPage';
 
 import { Route, Switch } from 'react-router-dom';
+import { fetchScoreData } from './services/scoresService';
+
 
 
 // if path is not exact, then show a 404 not found. very basic; only called by the componnent parameter given to us by Route from react-router-dom
@@ -48,8 +50,6 @@ function App() {
       }
     };
   }
-
-
 
 
   function getWinTries() {
@@ -212,6 +212,20 @@ function App() {
   // this is not toggling, that will be more of the switch component
 
   // the switch component should wrap around the routes and it is looking for a match of urls that we have listed and if there is not a match, it allows to show something else
+
+
+
+
+// function for retrieving the scores api
+// async always has await
+// this function needs to be right before the return statement
+
+async function getScores() {
+  console.log("getscores function is running")
+  const data = await fetchScoreData();
+  console.log(data)
+
+}
 
   return (
     <div className="App">
