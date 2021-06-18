@@ -216,6 +216,8 @@ function App() {
 
 
 
+
+
 // function for retrieving the scores api
 // async always has await
 // this function needs to be right before the return statement
@@ -226,6 +228,24 @@ async function getScores() {
   console.log(data)
 
 }
+
+// so that getScores is only ran once and is not in a loop
+// the empty array tells useEffect to only render this (getScores) the first time
+// don't rerun it every time there is a rerender unless there is a change
+// to getScores
+// useEffect is where any type of ajax request fetch requests should be
+// for example, when selecting a colour, that effects the dom and state is getting updated
+// based off which colour is selected, the app is rerunning this entire component, but it is not
+// rerendering getScores because of the empty array.
+// every time in react, when state is updated/ changed, everything in the app component is rerendering, and in this
+// case the timer is going off every second, and the backend then is triggered to reload
+// the highscores, but we don't want the backend to send information every second, 
+// only if the highscores change/update do we want it to resend its information
+
+useEffect(() => {
+  getScores();
+}, [])
+
 
   return (
     <div className="App">
