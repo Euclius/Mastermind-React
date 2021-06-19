@@ -1,0 +1,10 @@
+.HighScores {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.table {
+    width: 380px;
+}

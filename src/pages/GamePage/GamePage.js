@@ -5,6 +5,8 @@ import NewGameButton from '../../components/NewGameButton/NewGameButton';
 
 import { Link } from 'react-router-dom';
 
+import './GamePage.css'
+
 // make a component variable
 const GamePage = (props) => {
     return (
@@ -22,30 +24,37 @@ const GamePage = (props) => {
                         selColorIdx={props.selColorIdx}
                         setColorIdx={props.setColorIdx}
                     />
-                    <GameTimer 
-                    elapsedTime={props.elapsedTime}
-                    isTiming={props.isTiming}
-                    handleTimerUpdate={props.handleTimerUpdate}
+                    <GameTimer
+                        elapsedTime={props.elapsedTime}
+                        isTiming={props.isTiming}
+                        handleTimerUpdate={props.handleTimerUpdate}
                     />
-<div>
-                    <Link
-                    style={{marginBottom: 10}}
-                    className="btn btn-default" 
-                    to="/settings"
-                    >Difficulty Setting
-                    </Link>
+                    <div>
+                        <Link
+                            style={{ marginBottom: 10 }}
+                            className="btn btn-default"
+                            to="/settings"
+                        >Difficulty Setting
+                        </Link>
 
-                    <Link
-                    style={{marginBottom: 10}}
-                    to="/instructions"
-                    className="btn btn-default"
-                    > Instructions
-                    </Link>
+                        <Link
+                            style={{ marginBottom: 10 }}
+                            to="/instructions"
+                            className="btn btn-default"
+                        > Instructions
+                        </Link>
 
-                    <NewGameButton
-                        handleNewGameClick={props.handleNewGameClick}
-                    />
-</div>                    
+                        <Link
+                            style={{ marginBottom: 10 }}
+                            className="btn btn-default"
+                            to="/high-scores">
+                            High Scores
+                        </Link>
+
+                        <NewGameButton
+                            handleNewGameClick={props.handleNewGameClick}
+                        />
+                    </div>
                 </div>
             </div>
             <footer className="header-footer">{props.winTries ? `You Won in ${props.winTries} Guesses!` : 'Good Luck!'}</footer>

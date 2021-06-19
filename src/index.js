@@ -6,12 +6,12 @@ import reportWebVitals from './reportWebVitals';
 
 // importing BrowserRouter from react-router-dom. everything else comes with react, i believe
 
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <App />
+      <Route component={App}/>
     </Router>
   </React.StrictMode>,
   document.getElementById('root')
