@@ -20,7 +20,7 @@ return (
             <table className={`${styles.table} table text-info`}>
                 <thead>
                     <tr>
-                        <th width={80}>#</th>
+                        <th width={80}>Rank #</th>
                         <th width={100}>Initials</th>
                         <th width={100}>Guesses</th>
                         <th>Seconds</th>

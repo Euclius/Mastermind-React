@@ -8,6 +8,8 @@ import GamePage from './pages/GamePage/GamePage';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
 import InstructionsPage from './pages/InstructionsPage/InstructionsPage';
 import HighScoresPage from './pages/HighScoresPage/HighScoresPage'
+import SignupPage from './pages/SignupPage/SignupPage';
+import LoginPage from './pages/LoginPage/LoginPage'
 
 import { Route, Switch } from 'react-router-dom';
 import { fetchScoreData, addScoreData } from './services/scoresService';
@@ -34,10 +36,10 @@ function App(props) {
 
   const [gameState, setGameState] = useState(getInitialState());
 
-  const [scores, setScores] =useState([]);
+  const [scores, setScores] = useState([]);
 
   /* helper functions */
-// gameState related functions
+  // gameState related functions
   function genCode(numColors) {
     return new Array(4).fill().map(() => Math.floor(Math.random() * numColors));
   }
@@ -90,11 +92,11 @@ function App(props) {
 
 
   // function to make the new game function be able to be attached to a button
-/*
-  function handleNewGameClick() {
-    setGameState(getInitialState())
-  }
-*/
+  /*
+    function handleNewGameClick() {
+      setGameState(getInitialState())
+    }
+  */
   // function to make the new game function, same as above, but with the
   // ability of making the guess pegs equal to the number of colours in difficulty
   // the commented-out function for new game works, only it will have only four guess pegs
@@ -211,26 +213,26 @@ function App(props) {
     // the function below is replaced by the function not commented out.
     // at the end of the function, it will loook very identical to this, only this time
     // instead of not perfect, it is for it perfect so that the highscores can be grabbed
-   // if (perfect !== 4) gameStateCopy.guesses.push(getNewGuess())
+    // if (perfect !== 4) gameStateCopy.guesses.push(getNewGuess())
 
     // function for grabbing the score after the game is finished
-    if(perfect === 4) {
+    if (perfect === 4) {
       //grabs the time elapsed once the game is finished
       const elapsedTime = gameState.elapsedTime;
-    
+
 
       // stops the timer
       gameStateCopy.isTiming = false;
 
       // checks if there are less than 20 highscores then checks where
       // the current stands comparing the amount of attempts and time elapsed
-        if ((scores.length < 20 || isHighScore(guessesCopy, elapsedTime))) {
-          const initials = prompt('Congrats you have a top-20 score! Enter your initials: ').substr(0, 3);
-          
-          createScore({ initials, numGuesses: guessesCopy.length, seconds: elapsedTime });
-          props.history.push('/high-scores');
-        }
-    
+      if ((scores.length < 20 || isHighScore(guessesCopy, elapsedTime))) {
+        const initials = prompt('Congrats you have a top-20 score! Enter your initials: ').substr(0, 3);
+
+        createScore({ initials, numGuesses: guessesCopy.length, seconds: elapsedTime });
+        props.history.push('/high-scores');
+      }
+
     } else {
       gameStateCopy.guesses.push(getNewGuess());
     }
@@ -260,50 +262,50 @@ function App(props) {
 
 
 
-// function for retrieving the scores api
-// async always has await
-// this function needs to be right before the return statement
+  // function for retrieving the scores api
+  // async always has await
+  // this function needs to be right before the return statement
 
-async function getScores() {
-  console.log("getscores function is running")
-  const data = await fetchScoreData();
-  console.log(data)
-  setScores(data);
+  async function getScores() {
+    console.log("getscores function is running")
+    const data = await fetchScoreData();
+    console.log(data)
+    setScores(data);
 
-}
+  }
 
-// so that getScores is only ran once and is not in a loop
-// the empty array tells useEffect to only render this (getScores) the first time
-// don't rerun it every time there is a rerender unless there is a change
-// to getScores
-// useEffect is where any type of ajax request fetch requests should be
-// for example, when selecting a colour, that effects the dom and state is getting updated
-// based off which colour is selected, the app is rerunning this entire component, but it is not
-// rerendering getScores because of the empty array.
-// every time in react, when state is updated/ changed, everything in the app component is rerendering, and in this
-// case the timer is going off every second, and the backend then is triggered to reload
-// the highscores, but we don't want the backend to send information every second, 
-// only if the highscores change/update do we want it to resend its information
-// this useEffect is a hook
-useEffect(() => {
-  getScores();
-}, [])
+  // so that getScores is only ran once and is not in a loop
+  // the empty array tells useEffect to only render this (getScores) the first time
+  // don't rerun it every time there is a rerender unless there is a change
+  // to getScores
+  // useEffect is where any type of ajax request fetch requests should be
+  // for example, when selecting a colour, that effects the dom and state is getting updated
+  // based off which colour is selected, the app is rerunning this entire component, but it is not
+  // rerendering getScores because of the empty array.
+  // every time in react, when state is updated/ changed, everything in the app component is rerendering, and in this
+  // case the timer is going off every second, and the backend then is triggered to reload
+  // the highscores, but we don't want the backend to send information every second, 
+  // only if the highscores change/update do we want it to resend its information
+  // this useEffect is a hook
+  useEffect(() => {
+    getScores();
+  }, [])
 
-// function for creating a score which is used in function handle score click
-async function createScore(score) {
-  const data = await addScoreData(score);
-  console.log(score)
-  setScores(data);
-}
+  // function for creating a score which is used in function handle score click
+  async function createScore(score) {
+    const data = await addScoreData(score);
+    console.log(score)
+    setScores(data);
+  }
 
-// function for checking if the score is in the top 20 of highscores
-function isHighScore (guessesCopy, elapsedTime) {
-let lastScore = scores[scores.length - 1];
-return (guessesCopy.length < lastScore.numGuesses || (
-  guessesCopy.length === lastScore.numGuesses &&
-  elapsedTime < lastScore.seconds
-));
-}
+  // function for checking if the score is in the top 20 of highscores
+  function isHighScore(guessesCopy, elapsedTime) {
+    let lastScore = scores[scores.length - 1];
+    return (guessesCopy.length < lastScore.numGuesses || (
+      guessesCopy.length === lastScore.numGuesses &&
+      elapsedTime < lastScore.seconds
+    ));
+  }
 
 
   return (
@@ -338,8 +340,16 @@ return (guessesCopy.length < lastScore.numGuesses || (
           <InstructionsPage />
         } />
         <Route exact path="/high-scores" render={props =>
-        <HighScoresPage {...props} scores={scores} />
-      }/>
+          <HighScoresPage {...props} scores={scores} />
+        } />
+
+        <Route exact path="/signup" render={props =>
+          <SignupPage {...props} />
+        } />
+
+        <Route exact path="/login" render={props =>
+          <LoginPage {...props} />
+        } />
         <Route component={NotFound} />
       </Switch>
     </div>
