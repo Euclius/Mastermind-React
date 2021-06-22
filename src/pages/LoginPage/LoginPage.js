@@ -5,7 +5,7 @@ import './LoginPage.css'
 function LoginPage(props) {
     const [formState, setFormState] = useState({
         email: "",
-        password: ""
+        pw: ""
     });
 
     function handleChange(e) {

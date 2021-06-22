@@ -20,3 +20,5 @@ function SignupPage(props) {
         </div>
     )
 }
+
+export default SignupPage;
