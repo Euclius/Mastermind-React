@@ -11,6 +11,7 @@ function SignupForm (props) {
     passwordConf: ''
   });
 
+  // this functions allows typing to occur in the signup page
   function handleChange(e) {
     props.updateMessage('');
     setFormState(prevState => ({
@@ -22,9 +23,13 @@ function SignupForm (props) {
 
   async function handleSubmit (e) {
     e.preventDefault();
+    // prevents the reload 
     try {
       await signup(formState);
-      // Successfully signed up - show GamePage
+      // Successfully signed up - show GamePage('/')
+      // behind the scenes, this what link tags are doing
+      //handleSignUp is defined in app.js
+      props.handleSignupORLogin();
       props.history.push('/');
     } catch (err) {
       // Invalid user data (probably duplicate email)

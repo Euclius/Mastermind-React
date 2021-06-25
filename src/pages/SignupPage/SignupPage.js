@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import SignupForm from '../../components/SignupForm/SignupForm';
 import './SignupPage.css'
-
+//sign up form is taking the props because of {...props}
+// so we don't need to require handleSignUp in it
 function SignupPage(props) {
 
     // hook for setting state

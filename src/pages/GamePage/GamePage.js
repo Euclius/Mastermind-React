@@ -2,6 +2,7 @@ import GameBoard from '../../components/GameBoard/GameBoard';
 import ColorPicker from '../../components/ColorPicker/ColorPicker';
 import GameTimer from '../../components/GameTimer/GameTimer';
 import NewGameButton from '../../components/NewGameButton/NewGameButton';
+import NavBar from '../../components/NavBar/NavBar';
 
 import { Link } from 'react-router-dom';
 
@@ -11,6 +12,10 @@ import './GamePage.css'
 const GamePage = (props) => {
     return (
         <div className="Gamepage">
+            <NavBar 
+            user={props.user}
+            handleLogout={props.handleLogout}
+            />
             <div className="flex-h align-flex-end">
                 <GameBoard
                     colors={props.colors}
@@ -44,12 +49,12 @@ const GamePage = (props) => {
                         > Instructions
                         </Link>
 
-                        <Link
+                       { props.user && <Link
                             style={{ marginBottom: 10 }}
                             className="btn btn-default"
                             to="/high-scores">
                             High Scores
-                        </Link>
+                        </Link>}
 
                         <NewGameButton
                             handleNewGameClick={props.handleNewGameClick}
@@ -64,4 +69,16 @@ const GamePage = (props) => {
 
 export default GamePage;
 
-// anchor tags only use when you want to send user outside of the app
+// anchor (<a> href) tags only use when you want to send user outside of the app
+
+/*
+                       { props.user && <Link
+                            style={{ marginBottom: 10 }}
+                            className="btn btn-default"
+                            to="/high-scores">
+                            High Scores
+                        </Link>}
+                        by wrapping the link with curly braces  and passing props.user {props.user && <Link
+                            this basically says if there is a user, then there is a link
+                            if there is no user, then there is no link
+*/

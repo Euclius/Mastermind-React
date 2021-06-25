@@ -11,8 +11,9 @@ import HighScoresPage from './pages/HighScoresPage/HighScoresPage'
 import SignupPage from './pages/SignupPage/SignupPage';
 import LoginPage from './pages/LoginPage/LoginPage'
 
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { fetchScoreData, addScoreData } from './services/scoresService';
+import { getUser, logout } from './services/userService';
 
 
 
@@ -37,6 +38,10 @@ function App(props) {
   const [gameState, setGameState] = useState(getInitialState());
 
   const [scores, setScores] = useState([]);
+
+
+  // initilize state for the user -> {user: getUser()}
+  const [userState, setUserState] =  useState({user: getUser()})
 
   /* helper functions */
   // gameState related functions
@@ -242,6 +247,21 @@ function App(props) {
 
   }
 
+  // user related heloer function
+  function handleLogout() {
+    // call on userservice logout functoin
+    // set user state to null
+    logout();
+    setUserState({user: null})
+  }
+// right now, if you are to sign up in this app,
+// the token is present in the browser, but a refresh is required for
+// displaying the "WELCOME USERNAME"
+// so we need to set this function after a user signs up
+  function handleSignupORLogin() {
+setUserState({ user: getUser() });
+  }
+
 
   // App js used to contain all of what GamePage had, including the imports whose
   // paths had to be changed because of the move and refactoring the code is a must
@@ -265,6 +285,8 @@ function App(props) {
   // function for retrieving the scores api
   // async always has await
   // this function needs to be right before the return statement
+  // data and scores in our state are the same, the function for fetchScoreData is in another file
+  // but once it's called, it just grabs the data, so that express and react are using the same information
 
   async function getScores() {
     console.log("getscores function is running")
@@ -287,11 +309,28 @@ function App(props) {
   // the highscores, but we don't want the backend to send information every second, 
   // only if the highscores change/update do we want it to resend its information
   // this useEffect is a hook
+// the if statement was added and get scores was put inside
+// and the empty array is now taking taking a dependency, so if userState
+// has a user that is not null, then getscores
+// so having scores in state depends on having a logged in user
+// three phases to component life cycle which is what useEffect is based on/ is
+//phase 1: commit to the DOM/ mount to the DOM
+//phase 2: update the component's UI when state changes
+//phase 3: remove or destroy the component/ unmounting
+// if the array is empty, then useEffect ignores phase 2
+// without an array, it can cause a loop
+// by unmounting / destroying/ removing/ it is in reference to the DOM
+// by routing to a different page
+
   useEffect(() => {
-    getScores();
-  }, [])
+    if(userState.user) {
+      getScores(); 
+    }
+   
+  }, [userState.user])
 
   // function for creating a score which is used in function handle score click
+  
   async function createScore(score) {
     const data = await addScoreData(score);
     console.log(score)
@@ -325,7 +364,8 @@ function App(props) {
             handlePegClick={handlePegClick}
             handleScoreClick={handleScoreClick}
             handleTimerUpdate={handleTimerUpdate}
-
+            user={userState.user}
+            handleLogout={handleLogout}
           />
         } />
         <Route exact path="/settings" render={props =>
@@ -339,16 +379,27 @@ function App(props) {
         <Route exact path="/instructions" render={() =>
           <InstructionsPage />
         } />
+
+
         <Route exact path="/high-scores" render={props =>
-          <HighScoresPage {...props} scores={scores} />
+        getUser() ?
+          <HighScoresPage 
+          {...props} 
+          scores={scores} />
+          : 
+          <Redirect to="/login" />
         } />
 
         <Route exact path="/signup" render={props =>
-          <SignupPage {...props} />
+          <SignupPage 
+          {...props} 
+          handleSignupORLogin={handleSignupORLogin}/>
         } />
 
         <Route exact path="/login" render={props =>
-          <LoginPage {...props} />
+          <LoginPage 
+          {...props} 
+          handleSignupORLogin={handleSignupORLogin}/>
         } />
         <Route component={NotFound} />
       </Switch>
@@ -357,3 +408,18 @@ function App(props) {
 }
 
 export default App;
+
+/*
+added a ternary to this so that we try to get the user function
+or it will redirect to the login page
+        <Route exact path="/high-scores" render={props =>
+        getUser() ?
+          <HighScoresPage 
+          {...props} 
+          scores={scores} />
+          : 
+          <Redirect to="/login" />
+        } />
+
+
+*/
